@@ -1,0 +1,73 @@
+#!/usr/bin/bash
+
+# you have three cases you're interested in:
+# 0: default
+# 1: "dev"
+# 2: "show"
+# TODO: 3 - open this script. That is, "CLI DEV"
+# -d opens the dev environment with the correct image file
+# -s gives a CLI version... presumably a binary? produced from smalltalk?
+
+while getopts ds option
+do
+case "${option}"
+in
+d) echo "Open Squeak";
+~/Squeak/squeak.sh ~/Documents/WeekClock/weekclock.image
+exit 0;;
+s) echo "SUN/MON/TUES/WED/THR/FRI/SAT"; exit 0;;
+esac
+done
+
+###################################
+#
+#    DEFAULT BEHAVIOR: 
+#          show a cli clock
+#
+
+# variables to display the 'needle'
+counter=1
+needle=""
+
+# start w/week so far
+ticks=$(($(($(date +%u) - 1)) * 7 ))
+
+# add today's so far
+eval "$(date +'today=%F now=%s')"
+midnight=$(date -d "$today 0" +%s)
+seconds=$((now - midnight))
+d=$(( 86400 / 7  ))
+hourlyticks=$(( $seconds / $d ))
+
+# final total
+ticks=$(( $hourlyticks + $ticks ))
+
+### DISPLAY ###
+
+# first, display the dial
+echo 'MON****TUE****WED****THU****FRI****SAT****SUN****'
+
+# next, display whichever 'Needle'
+## the argument version is for debugging, leaving it in for now
+if [ $1 ]
+	then
+		while [ $counter -le $1 ]
+		do
+			needle+="-"
+			((counter++))
+		done
+
+		needle+="^"
+		echo $needle
+	else
+		while [ $counter -le $ticks ]
+		do
+			needle+="-"
+			((counter++))
+		done
+
+		needle+="^"
+		echo $needle
+
+fi
+exit
