@@ -1,21 +1,22 @@
 #!/usr/bin/bash
 
 # you have three cases you're interested in:
-# 0: default
-# 1: "dev"
-# 2: "show"
-# TODO: 3 - open this script. That is, "CLI DEV"
-# -d opens the dev environment with the correct image file
-# -s gives a CLI version... presumably a binary? produced from smalltalk?
+# 0: cli clock display
+# 1: dev-smalltalk
+# 2: dev-bash
+# -d opens the smalltalk dev environment with the correct image file
+# -c opens this script ? 
 
-while getopts ds option
+while getopts dc option
 do
 case "${option}"
 in
 d) echo "Open Squeak";
 ~/Squeak/squeak.sh ~/Documents/WeekClock/weekclock.image
 exit 0;;
-s) echo "SUN/MON/TUES/WED/THR/FRI/SAT"; exit 0;;
+c) echo "Open this?"; 
+vi ~/scripts/wkclk
+exit 0;;
 esac
 done
 
@@ -70,4 +71,7 @@ if [ $1 ]
 		echo $needle
 
 fi
-exit
+
+
+
+exit 0
